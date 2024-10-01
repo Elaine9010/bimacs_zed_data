@@ -17,7 +17,7 @@ The first step involves converting ZED .svo files into individual images for fur
 ### 2. Reorganize Data and Convert Images
 After converting the raw SVO files to images, the next step is to reorganize the folder structure, separate depth and RGB images, and convert PNG images to JPG format for segmentation.
 
-`python reorganize.py --input /zed_raw_data/subject_1/task_1_k_cooking/take_0`
+`python reorganize.py --input ./zed_raw_data/subject_1/task_1_k_cooking/take_0`
 
 ### 3. Generate Segmentation Masks
 Use the Segment Anything Model (SAM2) to generate segmentation masks from the RGB images
@@ -25,13 +25,13 @@ Use the Segment Anything Model (SAM2) to generate segmentation masks from the RG
 ### 4. Create 3D Objects from Depth Images
 After generating the segmentation masks, the depth images can be used to create 3D object data.
 
-`python create_3d_objects.py -i /zed_raw_data/subject_1/task_1_k_cooking/take_0 -o /zed_derived_data -v -s`
+`python create_3d_objects.py -i ./zed_raw_data/subject_1/task_1_k_cooking/take_0 -o ./zed_derived_data -v -s`
 
 This script generates a dataset of 3D objects from the depth images and stores them in the output folder. The -v flag enables verbose output, and the -s flag enables additional settings like scaling.
 
 ### 5. Generate Spatial Relations
 Finally, the spatial relationships between objects can be computed and saved to JSON files.
 
-`python generate_relations.py -input_folder /zed_derived_data/subject_1/task_1_k_cooking -output_folder /zed_derived_data/subject_1/task_1_k_cooking`
+`python generate_relations.py -input_folder ./zed_derived_data/subject_1/task_1_k_cooking -output_folder ./zed_derived_data/subject_1/task_1_k_cooking`
 
 This script processes the 3D object dataset and outputs JSON files describing the spatial relations between objects.
