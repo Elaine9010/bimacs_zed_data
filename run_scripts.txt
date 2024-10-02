@@ -1,0 +1,29 @@
+# Convert svo to images
+(conda base)
+cd ~/han_project/zed-sdk/recording/export/svo/python
+mkdir ./zed_raw_data/subject_1/task_1_k_cooking/take_7
+python svo_export.py --mode 4 --input_svo_file ./zed_raw_data/subject_1/task_1_k_cooking/take_7.svo2 --output_path_dir ./zed_raw_data/subject_1/task_1_k_cooking/take_7
+
+
+# Reorganize folders,seperate depth and rgb images, convert png imgs to jpgs and save them seperately for segmentation
+cd /home/han/Documents/ZED
+python reorganize.py --input ./zed_raw_data/subject_1/task_1_k_cooking/take_7
+
+
+# Get masks from jpg images
+cd ~/han_project/sam2_video_predictor-main/segment-anything-2
+conda activate sam2
+python sam2_video_gui.py -f ./zed_raw_data/subject_3/task_1_k_cooking/take_1/rgb_jpgs/rgb_jpgs_p1
+
+
+# Generate 3d_objects dataset from depth imgs and masks
+cd /home/han/Documents/ZED
+python create_3d_objects.py -i ./zed_raw_data/subject_3/task_1_k_cooking/take_2 -o ./zed_data/zed_derived_data -v -s
+
+
+# Generates spatial relations between objects and saves them to json files
+cd /home/han/Documents/ZED
+python generate_relations.py -input_folder ./zed_data/zed_derived_data/subject_3/task_1_k_cooking -output_folder ./zed_data/zed_derived_data/subject_3/task_1_k_cooking
+
+# Play demo to label the actions
+python play_demo.py --input ./zed_raw_data/subject_3/task_1_k_cooking/take_5/rgb_pngs
